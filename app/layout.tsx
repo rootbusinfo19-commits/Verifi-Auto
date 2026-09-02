@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,25 +21,33 @@ export default function RootLayout({
         {/* Header */}
         <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">VA</span>
               </div>
               <span className="text-xl font-semibold tracking-tight">Verifi Auto</span>
-            </div>
+            </Link>
+
             <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-              <a href="/" className="hover:text-blue-900 transition">Home</a>
-              <a href="/search" className="hover:text-blue-900 transition">Search</a>
+              <Link href="/" className="hover:text-blue-900 transition">Home</Link>
+              <Link href="/search" className="hover:text-blue-900 transition">Search</Link>
               <a href="#" className="hover:text-blue-900 transition">How it works</a>
               <a href="#" className="hover:text-blue-900 transition">For Professionals</a>
             </nav>
+
             <div className="flex items-center gap-3">
-              <button className="text-sm font-medium hover:text-blue-900 transition">
+              <Link
+                href="/login"
+                className="text-sm font-medium hover:text-blue-900 transition"
+              >
                 Log in
-              </button>
-              <button className="bg-blue-900 text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-blue-800 transition">
+              </Link>
+              <Link
+                href="/register"
+                className="bg-blue-900 text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-blue-800 transition"
+              >
                 Get Started
-              </button>
+              </Link>
             </div>
           </div>
         </header>
