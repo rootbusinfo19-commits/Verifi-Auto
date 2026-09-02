@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="bg-white text-gray-900">
@@ -19,9 +21,12 @@ export default function Home() {
               placeholder="Search by brand, city or workshop..."
               className="flex-1 px-4 py-3 rounded-xl outline-none text-sm"
             />
-            <button className="bg-blue-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-800 transition">
+            <Link
+              href="/search"
+              className="bg-blue-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-800 transition text-center"
+            >
               Search
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -65,9 +70,12 @@ export default function Home() {
         <p className="text-gray-600 mb-8 max-w-xl mx-auto">
           Join vehicle owners across South Africa who only work with verified mechanics and workshops.
         </p>
-        <button className="bg-blue-900 text-white px-8 py-3.5 rounded-full font-medium hover:bg-blue-800 transition">
+        <Link
+          href="/search"
+          className="bg-blue-900 text-white px-8 py-3.5 rounded-full font-medium hover:bg-blue-800 transition inline-block"
+        >
           Start Searching
-        </button>
+        </Link>
       </section>
     </div>
   );
