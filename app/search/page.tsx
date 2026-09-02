@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function SearchPage() {
   return (
     <div className="bg-white text-gray-900 min-h-screen">
@@ -46,91 +48,97 @@ export default function SearchPage() {
           </select>
         </div>
 
-        {/* Example Result Cards */}
+        {/* Result Cards */}
         <div className="grid gap-6">
           {/* Card 1 */}
-          <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
-                  TS
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold">Thabo’s Auto Specialists</h3>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                      Verified
-                    </span>
+          <Link href="/profile/1" className="block">
+            <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white cursor-pointer">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
+                    TS
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Workshop · Johannesburg, Gauteng</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Specialises in Toyota, Volkswagen & Ford
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold">Thabo’s Auto Specialists</h3>
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        Verified
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Workshop · Johannesburg, Gauteng</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Specialises in Toyota, Volkswagen & Ford
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-blue-900">92</div>
-                <div className="text-xs text-gray-500">Verifi Score™</div>
-                <div className="text-xs text-gray-400 mt-1">Platinum</div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-blue-900">92</div>
+                  <div className="text-xs text-gray-500">Verifi Score™</div>
+                  <div className="text-xs text-gray-400 mt-1">Platinum</div>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Card 2 */}
-          <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
-                  LM
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold">Lerato Mokoena</h3>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                      Verified
-                    </span>
+          <Link href="/profile/2" className="block">
+            <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white cursor-pointer">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
+                    LM
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Mechanic · Pretoria, Gauteng</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    BMW & Mercedes-Benz specialist · 12 years experience
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold">Lerato Mokoena</h3>
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        Verified
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Mechanic · Pretoria, Gauteng</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      BMW & Mercedes-Benz specialist · 12 years experience
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-blue-900">88</div>
-                <div className="text-xs text-gray-500">Verifi Score™</div>
-                <div className="text-xs text-gray-400 mt-1">Gold</div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-blue-900">88</div>
+                  <div className="text-xs text-gray-500">Verifi Score™</div>
+                  <div className="text-xs text-gray-400 mt-1">Gold</div>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Card 3 */}
-          <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
-                  CP
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold">Cape Precision Motors</h3>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                      Verified
-                    </span>
+          <Link href="/profile/3" className="block">
+            <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition bg-white cursor-pointer">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-900 font-bold text-lg">
+                    CP
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Workshop · Cape Town, Western Cape</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Audi, Volkswagen & Porsche · Full diagnostic equipment
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold">Cape Precision Motors</h3>
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                        Verified
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Workshop · Cape Town, Western Cape</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Audi, Volkswagen & Porsche · Full diagnostic equipment
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-blue-900">95</div>
-                <div className="text-xs text-gray-500">Verifi Score™</div>
-                <div className="text-xs text-gray-400 mt-1">Platinum</div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-blue-900">95</div>
+                  <div className="text-xs text-gray-500">Verifi Score™</div>
+                  <div className="text-xs text-gray-400 mt-1">Platinum</div>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
     </div>
