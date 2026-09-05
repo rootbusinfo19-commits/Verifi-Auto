@@ -29,7 +29,7 @@ export default function LoginPage() {
     }
 
     // Login successful – redirect to homepage for now
-    router.push("/");
+    router.push("/dashboard");
   };
 
   return (
