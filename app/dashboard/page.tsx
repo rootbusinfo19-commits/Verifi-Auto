@@ -122,9 +122,12 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition">
-                Start Verification Application
-              </button>
+             <Link
+  href="/apply"
+  className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
+>
+  Start Verification Application
+</Link>
               <Link
                 href="/search"
                 className="border border-gray-300 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
@@ -150,9 +153,12 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition">
-                Start Workshop Verification
-              </button>
+              <Link
+  href="/apply"
+  className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
+>
+  Start Verification Application
+</Link>
               <Link
                 href="/search"
                 className="border border-gray-300 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
