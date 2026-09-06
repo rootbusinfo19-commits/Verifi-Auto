@@ -13,7 +13,6 @@ export default function ApplyPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Form fields
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
@@ -46,12 +45,30 @@ export default function ApplyPage() {
     setError("");
     setMessage("");
 
-    // For now we just show a success message.
-    // Later we will save this data to a Supabase table.
-    setTimeout(() => {
-      setMessage("Application submitted successfully! Our team will review it shortly.");
+    const accountType = user?.user_metadata?.account_type || "mechanic";
+
+    const { error } = await supabase.from("applications").insert({
+      user_id: user.id,
+      full_name: fullName,
+      business_name: accountType === "workshop" ? businessName : null,
+      phone,
+      city,
+      province,
+      years_experience: parseInt(yearsExperience) || 0,
+      specializations,
+      qualifications,
+      account_type: accountType,
+      status: "pending",
+    });
+
+    if (error) {
+      setError(error.message);
       setSubmitting(false);
-    }, 1500);
+      return;
+    }
+
+    setMessage("Application submitted successfully! Our team will review it shortly.");
+    setSubmitting(false);
   };
 
   if (loading) {
