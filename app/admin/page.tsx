@@ -10,6 +10,20 @@ export default function AdminPage() {
   const [user, setUser] = useState<any>(null);
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState<string | null>(null);
+
+  const loadApplications = async () => {
+    const { data, error } = await supabase
+      .from("applications")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+    } else {
+      setApplications(data || []);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -21,23 +35,29 @@ export default function AdminPage() {
       }
 
       setUser(user);
-
-      const { data, error } = await supabase
-        .from("applications")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error(error);
-      } else {
-        setApplications(data || []);
-      }
-
+      await loadApplications();
       setLoading(false);
     };
 
     loadData();
   }, [router]);
+
+  const updateStatus = async (id: string, status: "approved" | "rejected") => {
+    setUpdating(id);
+
+    const { error } = await supabase
+      .from("applications")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      alert("Error updating status: " + error.message);
+    } else {
+      await loadApplications();
+    }
+
+    setUpdating(null);
+  };
 
   if (loading) {
     return (
@@ -49,6 +69,7 @@ export default function AdminPage() {
 
   const pendingCount = applications.filter((a) => a.status === "pending").length;
   const approvedCount = applications.filter((a) => a.status === "approved").length;
+  const rejectedCount = applications.filter((a) => a.status === "rejected").length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,9 +91,9 @@ export default function AdminPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
+        <div className="grid md:grid-cols-4 gap-6 mb-10">
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <p className="text-sm text-gray-500">Total Applications</p>
+            <p className="text-sm text-gray-500">Total</p>
             <p className="text-3xl font-bold text-gray-900 mt-1">{applications.length}</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
@@ -82,6 +103,10 @@ export default function AdminPage() {
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <p className="text-sm text-gray-500">Approved</p>
             <p className="text-3xl font-bold text-green-700 mt-1">{approvedCount}</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-gray-500">Rejected</p>
+            <p className="text-3xl font-bold text-red-600 mt-1">{rejectedCount}</p>
           </div>
         </div>
 
@@ -107,12 +132,12 @@ export default function AdminPage() {
                           {app.business_name && ` – ${app.business_name}`}
                         </h3>
                         <span
-                          className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                          className={`text-xs font-medium px-2.5 py-0.5 rounded-full capitalize ${
                             app.status === "pending"
                               ? "bg-orange-100 text-orange-800"
                               : app.status === "approved"
                               ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
+                              : "bg-red-100 text-red-800"
                           }`}
                         >
                           {app.status}
@@ -128,14 +153,25 @@ export default function AdminPage() {
                         Submitted: {new Date(app.created_at).toLocaleString()}
                       </p>
                     </div>
-                    <div className="flex gap-2">
-                      <button className="text-sm bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800 transition">
-                        Approve
-                      </button>
-                      <button className="text-sm border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-50 transition">
-                        Reject
-                      </button>
-                    </div>
+
+                    {app.status === "pending" && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => updateStatus(app.id, "approved")}
+                          disabled={updating === app.id}
+                          className="text-sm bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800 transition disabled:opacity-50"
+                        >
+                          {updating === app.id ? "..." : "Approve"}
+                        </button>
+                        <button
+                          onClick={() => updateStatus(app.id, "rejected")}
+                          disabled={updating === app.id}
+                          className="text-sm border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-50 transition disabled:opacity-50"
+                        >
+                          {updating === app.id ? "..." : "Reject"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
