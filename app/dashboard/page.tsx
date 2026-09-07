@@ -8,10 +8,11 @@ import { supabase } from "../../lib/supabase";
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [application, setApplication] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getUser = async () => {
+    const getData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
@@ -20,10 +21,21 @@ export default function DashboardPage() {
       }
 
       setUser(user);
+
+      // Get the user's latest application
+      const { data } = await supabase
+        .from("applications")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      setApplication(data);
       setLoading(false);
     };
 
-    getUser();
+    getData();
   }, [router]);
 
   const handleLogout = async () => {
@@ -41,6 +53,12 @@ export default function DashboardPage() {
 
   const accountType = user?.user_metadata?.account_type || "customer";
   const fullName = user?.user_metadata?.full_name || "User";
+
+  const statusColor = {
+    pending: "bg-orange-100 text-orange-800",
+    approved: "bg-green-100 text-green-800",
+    rejected: "bg-red-100 text-red-800",
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,7 +101,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Different content based on account type */}
+        {/* Customer View */}
         {accountType === "customer" && (
           <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
             <h2 className="text-xl font-semibold mb-2">Vehicle Owner Dashboard</h2>
@@ -107,58 +125,69 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {accountType === "mechanic" && (
+        {/* Mechanic / Workshop View */}
+        {(accountType === "mechanic" || accountType === "workshop") && (
           <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">Mechanic Dashboard</h2>
+            <h2 className="text-xl font-semibold mb-2">
+              {accountType === "workshop" ? "Workshop Dashboard" : "Mechanic Dashboard"}
+            </h2>
             <p className="text-gray-600 mb-6">
               Manage your professional profile and verification status.
             </p>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-              <p className="text-sm text-blue-900">
-                <strong>Verification Status:</strong> Not yet submitted
-              </p>
-              <p className="text-sm text-blue-800 mt-1">
-                Complete your verification to appear in search results and receive a Verifi Score™.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-4">
-             <Link
-  href="/apply"
-  className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
->
-  Start Verification Application
-</Link>
-              <Link
-                href="/search"
-                className="border border-gray-300 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
-              >
-                View Search
-              </Link>
-            </div>
-          </div>
-        )}
 
-        {accountType === "workshop" && (
-          <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">Workshop Dashboard</h2>
-            <p className="text-gray-600 mb-6">
-              Manage your workshop profile, technicians, and verification.
-            </p>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
-              <p className="text-sm text-blue-900">
-                <strong>Verification Status:</strong> Not yet submitted
-              </p>
-              <p className="text-sm text-blue-800 mt-1">
-                Submit your workshop for verification to get a Verifi Score™ and appear in search results.
-              </p>
-            </div>
+            {/* Application Status */}
+            {application ? (
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-500">Verification Status</p>
+                    <p className="font-medium mt-1 capitalize">
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor[application.status as keyof typeof statusColor] || "bg-gray-100"}`}>
+                        {application.status}
+                      </span>
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    Submitted {new Date(application.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {application.status === "pending" && (
+                  <p className="text-sm text-gray-600 mt-3">
+                    Your application is being reviewed by the Verifi Auto team.
+                  </p>
+                )}
+                {application.status === "approved" && (
+                  <p className="text-sm text-green-700 mt-3">
+                    Congratulations! You are now a verified professional on Verifi Auto.
+                  </p>
+                )}
+                {application.status === "rejected" && (
+                  <p className="text-sm text-red-600 mt-3">
+                    Your application was not approved. Please contact support for more information.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6">
+                <p className="text-sm text-blue-900">
+                  <strong>Verification Status:</strong> Not yet submitted
+                </p>
+                <p className="text-sm text-blue-800 mt-1">
+                  Complete your verification to appear in search results and receive a Verifi Score™.
+                </p>
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-4">
-              <Link
-  href="/apply"
-  className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
->
-  Start Verification Application
-</Link>
+              {!application && (
+                <Link
+                  href="/apply"
+                  className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
+                >
+                  Start Verification Application
+                </Link>
+              )}
               <Link
                 href="/search"
                 className="border border-gray-300 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
