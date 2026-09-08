@@ -5,12 +5,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
+// Only this email can access the Admin page
+const ADMIN_EMAIL = "rootbusinfo19@gmail.com";
+
 export default function AdminPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   const loadApplications = async () => {
     const { data, error } = await supabase
@@ -31,6 +35,13 @@ export default function AdminPage() {
 
       if (!user) {
         router.push("/login");
+        return;
+      }
+
+      // Check if the user is the admin
+      if (user.email !== ADMIN_EMAIL) {
+        setUnauthorized(true);
+        setLoading(false);
         return;
       }
 
@@ -63,6 +74,25 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-gray-500">Loading admin panel...</p>
+      </div>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
+          <p className="text-gray-600 mb-6">
+            You do not have permission to view this page.
+          </p>
+          <Link
+            href="/dashboard"
+            className="bg-blue-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-800 transition"
+          >
+            Go to Dashboard
+          </Link>
+        </div>
       </div>
     );
   }
