@@ -148,10 +148,20 @@ export default function SearchPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-blue-900">—</div>
-                      <div className="text-xs text-gray-500">Verifi Score™</div>
-                      <div className="text-xs text-gray-400 mt-1">Coming soon</div>
-                    </div>
+  <div className="text-2xl font-bold text-blue-900">
+    {pro.verifi_score || "—"}
+  </div>
+  <div className="text-xs text-gray-500">Verifi Score™</div>
+  <div className="text-xs text-gray-400 mt-1">
+    {pro.verifi_score >= 90
+      ? "Platinum"
+      : pro.verifi_score >= 80
+      ? "Gold"
+      : pro.verifi_score >= 70
+      ? "Silver"
+      : "Verified"}
+  </div>
+</div>
                   </div>
                 </div>
               </Link>

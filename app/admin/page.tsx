@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
-// Only this email can access the Admin page
 const ADMIN_EMAIL = "rootbusinfo19@gmail.com";
 
 export default function AdminPage() {
@@ -38,7 +37,6 @@ export default function AdminPage() {
         return;
       }
 
-      // Check if the user is the admin
       if (user.email !== ADMIN_EMAIL) {
         setUnauthorized(true);
         setLoading(false);
@@ -53,12 +51,39 @@ export default function AdminPage() {
     loadData();
   }, [router]);
 
+  // Simple Verifi Score calculation
+  const calculateScore = (app: any) => {
+    let score = 50; // Base score
+
+    const years = parseInt(app.years_experience) || 0;
+
+    if (years >= 15) score += 35;
+    else if (years >= 10) score += 25;
+    else if (years >= 5) score += 15;
+    else if (years >= 2) score += 8;
+
+    // Bonus for having qualifications listed
+    if (app.qualifications && app.qualifications.length > 20) {
+      score += 10;
+    }
+
+    // Cap the score between 50 and 98
+    return Math.min(Math.max(score, 50), 98);
+  };
+
   const updateStatus = async (id: string, status: "approved" | "rejected") => {
     setUpdating(id);
 
+    const app = applications.find((a) => a.id === id);
+    const updateData: any = { status };
+
+    if (status === "approved" && app) {
+      updateData.verifi_score = calculateScore(app);
+    }
+
     const { error } = await supabase
       .from("applications")
-      .update({ status })
+      .update(updateData)
       .eq("id", id);
 
     if (error) {
@@ -104,7 +129,6 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -120,7 +144,6 @@ export default function AdminPage() {
           </Link>
         </div>
 
-        {/* Stats */}
         <div className="grid md:grid-cols-4 gap-6 mb-10">
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <p className="text-sm text-gray-500">Total</p>
@@ -140,7 +163,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Applications List */}
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold">Verification Applications</h2>
@@ -172,6 +194,11 @@ export default function AdminPage() {
                         >
                           {app.status}
                         </span>
+                        {app.verifi_score && (
+                          <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900">
+                            Score: {app.verifi_score}
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm text-gray-500 mt-1 capitalize">
                         {app.account_type} · {app.city}, {app.province}

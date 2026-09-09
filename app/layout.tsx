@@ -31,7 +31,7 @@ export default function RootLayout({
             <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
               <Link href="/" className="hover:text-blue-900 transition">Home</Link>
               <Link href="/search" className="hover:text-blue-900 transition">Search</Link>
-              <a href="#" className="hover:text-blue-900 transition">How it works</a>
+              <Link href="/how-it-works" className="hover:text-blue-900 transition">How it works</Link>
               <a href="#" className="hover:text-blue-900 transition">For Professionals</a>
             </nav>
 

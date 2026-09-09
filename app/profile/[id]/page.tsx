@@ -97,10 +97,20 @@ export default function ProfilePage() {
 
               <div className="mt-4 flex flex-wrap gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500">Verifi Score™</span>
-                  <div className="text-2xl font-bold text-blue-900">—</div>
-                  <div className="text-xs text-gray-400">Coming soon</div>
-                </div>
+  <span className="text-gray-500">Verifi Score™</span>
+  <div className="text-2xl font-bold text-blue-900">
+    {profile.verifi_score || "—"}
+  </div>
+  <div className="text-xs text-gray-400">
+    {profile.verifi_score >= 90
+      ? "Platinum"
+      : profile.verifi_score >= 80
+      ? "Gold"
+      : profile.verifi_score >= 70
+      ? "Silver"
+      : "Verified"}
+  </div>
+</div>
                 <div className="border-l border-gray-200 pl-4">
                   <span className="text-gray-500">Years Experience</span>
                   <div className="text-xl font-semibold">{profile.years_experience || "—"}</div>
